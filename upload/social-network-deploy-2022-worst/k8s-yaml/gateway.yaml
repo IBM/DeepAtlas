@@ -1,0 +1,43 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: sn-gateway
+  namespace: social-network
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: sn
+  namespace: social-network
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - sn-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /frontend
+    rewrite:
+        uri: /
+    route:
+    - destination:
+        host: nginx-thrift
+  - match:
+    - uri:
+        prefix: /media
+    rewrite:
+        uri: /
+    route:
+    - destination:
+        host: media-frontend

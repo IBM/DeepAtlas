@@ -1,0 +1,12 @@
+ apiVersion: v1  
+ kind: PersistentVolumeClaim  
+ metadata:  
+  name: social-graph-mongodb-pvc
+  namespace: social-network
+ spec:  
+  storageClassName: cstor-disk
+  accessModes:  
+   - ReadWriteOnce  
+  resources:  
+   requests:  
+    storage: 5Gi

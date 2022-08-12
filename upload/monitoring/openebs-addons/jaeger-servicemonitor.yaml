@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: tracing
+  namespace: monitoring
+spec:
+  podMetricsEndpoints:
+  - interval: 5s
+    targetPort: 14269
+  selector:
+    matchLabels:
+      app: jaeger

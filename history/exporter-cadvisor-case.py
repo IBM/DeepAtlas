@@ -1,0 +1,89 @@
+from urllib import request, parse
+from datetime import datetime
+import json
+
+import matplotlib.pyplot as plt
+
+PROMETHEUS_URL = 'http://c4130-110233.wisc.cloudlab.us:31115/'
+
+START_TIME = datetime(2022, 8, 3, 16, 33)
+END_TIME   = datetime(2022, 8, 3, 18, 15)
+
+
+def prometheus_query(query, start=int(START_TIME.timestamp()), end=int(END_TIME.timestamp()), step=5):
+    url = PROMETHEUS_URL + 'api/v1/query_range?query=%s' % parse.quote(query)
+    if start is not None:
+        url += '&start=%d' % start
+    if end is not None:
+        url += '&end=%d' % end
+    if step is not None:
+        url += '&step=%d' % step
+    with request.urlopen(url) as u:
+        data = json.loads(u.read().decode())
+    assert data['status'] == 'success', 'Error: %s' % data
+    return data
+
+
+########################################################################################################################
+# Discover all components in the namespace
+########################################################################################################################
+data = prometheus_query(query='sum(rate(container_cpu_usage_seconds_total{namespace="social-network", container!=""}[1m])) by (pod)')
+components = {}
+for result in data['data']['result']:
+    cid = '-'.join(result['metric']['pod'].split('-')[:-2])
+    components[cid] = {'id': cid}
+
+for cid, component in components.items():
+    print('Component %s' % cid)
+    for k, v in component.items():
+        print('   > %s: %s' % (k, v))
+
+########################################################################################################################
+# Prometheus
+########################################################################################################################
+queries = {
+    'cpu': 'sum(rate(container_cpu_usage_seconds_total{namespace="social-network", container!=""}[1m])) by (pod)',
+    'memory': 'sum(container_memory_rss{namespace="social-network", container!=""}) by (pod)',
+}
+
+timestamps = None
+for query_name, query in queries.items():
+    data = prometheus_query(query=query)
+    for result in data['data']['result']:
+        cid = '-'.join(result['metric']['pod'].split('-')[:-2])
+        assert cid in components, 'Pod `%s` has no container %s' % (result['metric']['pod'], cid)
+
+        _timestamps = [int(tup[0]) for tup in result['values']]
+        _values = [float(tup[1]) for tup in result['values']]
+        components[cid][query_name] = _values
+        if timestamps is None:
+            timestamps = _timestamps
+        assert timestamps == _timestamps, 'Timestamps are inconsistent!'
+
+queries = {
+    'write-iops': 'increase(openebs_writes{}[1m])/60',
+    'read-iops': 'increase(openebs_reads{}[1m])/60',
+    'write-throughput': 'increase(openebs_write_block_count{}[1m])*4096/60',
+    'read-throughput': 'increase(openebs_read_block_count{}[1m])*4096/60',
+    'disk-usage': 'openebs_actual_used{}'
+}
+
+for query_name, query in queries.items():
+    data = prometheus_query(query=query)
+    for result in data['data']['result']:
+        pvc_name = result['metric']['openebs_pvc']
+        cid = pvc_name.replace('-pvc', '')
+        if cid not in components:
+            print('No host is found for PVC `%s`' % pvc_name)
+            continue
+        assert cid in components, 'Pod `%s` has no container %s' % (result['metric']['pod'], cid)
+
+        _timestamps = [int(tup[0]) for tup in result['values']]
+        _values = [float(tup[1]) for tup in result['values']]
+        components[cid][query_name] = _values
+        assert timestamps == _timestamps, 'Timestamps are inconsistent!'
+
+
+with open("experiments/story/cadvisor.json", "w") as outfile:
+    json.dump({'components': components, 'timestamps': timestamps,
+               'start': int(START_TIME.timestamp()), 'end': int(END_TIME.timestamp()), 'step': 5}, outfile)

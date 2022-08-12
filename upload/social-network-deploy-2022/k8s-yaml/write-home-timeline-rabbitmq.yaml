@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: write-home-timeline-rabbitmq
+  labels:
+    version: v1
+    app: write-home-timeline-rabbitmq
+  namespace: social-network
+spec:
+  ports:
+  - port: 4369
+    name: tcp-1
+  - port: 5671
+    name: tcp-2
+  - port: 5672
+    name: tcp-3
+  - port: 25672
+    name: tcp-4
+  selector:
+    version: v1
+    app: write-home-timeline-rabbitmq
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    "sidecar.jaegertracing.io/inject": "true"
+  name: write-home-timeline-rabbitmq
+  labels:
+    version: v1
+    app: write-home-timeline-rabbitmq
+  namespace: social-network
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      version: v1
+      app: write-home-timeline-rabbitmq
+  template:
+    metadata:
+      annotations:
+        io.cilium.proxy-visibility: "<Egress/9090/TCP/HTTP>,<Egress/6379/TCP/REDIS>,<Egress/11211/TCP/MEMCACHED>,<Egress/27107/TCP/MONGODB>,<Egress/5672/TCP/RABBITMQ>,<Ingress/9090/TCP/HTTP>,<Ingress/6379/TCP/REDIS>,<Ingress/11211/TCP/MEMCACHED>,<Ingress/27017/TCP/MONGODB>,<Ingress/5672/TCP/RABBITMQ>"
+
+      labels: 
+        version: v1
+        app: write-home-timeline-rabbitmq
+      name: write-home-timeline-rabbitmq
+    spec:
+      nodeSelector:
+        location: onprem
+      containers:
+      - name: write-home-timeline-rabbitmq
+        image: poanpan/rabbitmq:v1
+        env:
+        - name: RABBITMQ_ERLANG_COOKIE
+          value: "WRITE-HOME-TIMELINE-RABBITMQ"
+        - name: RABBITMQ_DEFAULT_VHOST
+          value: "/"
+      restartPolicy: Always
+      # nodeName: 10.0.0.13
+      # schedulerName: poseidon

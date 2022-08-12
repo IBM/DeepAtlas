@@ -1,0 +1,19 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger-elasticsearch
+  namespace: monitoring
+spec:
+  strategy: production
+  sampling:
+    options:
+      default_strategy:
+        type: const
+        param: 1
+  storage:
+    type: elasticsearch
+    options:
+      es:
+        server-urls: http://elasticsearch.monitoring.svc:9200
+  collector:
+    replicas: 6

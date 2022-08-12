@@ -1,0 +1,512 @@
+{
+	"info": {
+		"_postman_id": "378c07b7-c999-4ee8-8417-ed453b7f4ca6",
+		"name": "microservices_social-network",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21358368"
+	},
+	"item": [
+		{
+			"name": "user/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "first_name",
+							"value": "kaho",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": "chow",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "khchow",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "abc",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "99999",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/user/register",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "khchow",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "abc",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/user/login",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/follow",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "followee_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/user/follow",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"user",
+						"follow"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/unfollow",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "followee_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/user/unfollow",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"user",
+						"unfollow"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/get_followee",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/user/get_followee?user_id=2",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"user",
+						"get_followee"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/get_follower",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/user/get_follower?user_id=1",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"user",
+						"get_follower"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload-media",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "media",
+							"type": "file",
+							"src": "/Users/khchow/Desktop/Private/osdi20-qiu.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_media}}/upload-media",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_media}}",
+					"path": [
+						"upload-media"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-media",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_media}}/get-media?filename=383507534187809856.png",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_media}}",
+					"path": [
+						"get-media"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "383507534187809856.png"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/compose",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "khchow2",
+							"type": "text"
+						},
+						{
+							"key": "post_type",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "text",
+							"value": "hello3",
+							"type": "text"
+						},
+						{
+							"key": "media_ids",
+							"value": "[\"383507534187809856\"]",
+							"type": "text"
+						},
+						{
+							"key": "media_types",
+							"value": "[\"png\"]",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/post/compose",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"post",
+						"compose"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user-timeline/read",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/user-timeline/read?user_id=2&start=0&stop=10",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"user-timeline",
+						"read"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "2"
+						},
+						{
+							"key": "start",
+							"value": "0"
+						},
+						{
+							"key": "stop",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "home-timeline/read",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://{{node_id}}.{{node_location}}.cloudlab.us:{{port_frontend}}/wrk2-api/home-timeline/read?user_id=2&start=0&stop=10",
+					"protocol": "http",
+					"host": [
+						"{{node_id}}",
+						"{{node_location}}",
+						"cloudlab",
+						"us"
+					],
+					"port": "{{port_frontend}}",
+					"path": [
+						"wrk2-api",
+						"home-timeline",
+						"read"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "2"
+						},
+						{
+							"key": "start",
+							"value": "0"
+						},
+						{
+							"key": "stop",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "node_id",
+			"value": "clnode251",
+			"type": "string"
+		},
+		{
+			"key": "port_frontend",
+			"value": "31000",
+			"type": "string"
+		},
+		{
+			"key": "port_media",
+			"value": "31001",
+			"type": "string"
+		},
+		{
+			"key": "node_location",
+			"value": "clemson"
+		}
+	]
+}
